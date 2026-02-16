@@ -179,6 +179,9 @@
         if(acc_p1 === 'rules_list' && acc_p2 === 'update'){// display the rules list
             // clear rules
             const list = document.getElementById('prog-list');
+            
+            
+            
             list.innerHTML = ""; 
 
             let relayOpts = '<option value="">None</option>';
@@ -745,23 +748,23 @@
 const container = document.getElementById('prog-list'); 
 ['change', 'click'].forEach(evt => 
     container.addEventListener(evt, (e) => {
-        const el = e.target;
+        let el = e.target;
         
         if (evt === 'click' && (el.closest('.btn-ok') || el.type !== 'checkbox')) return; // Ignore "OK" buttons & non-checkbox clicks
-        const row = el.closest('.prog-row');
+        let row = el.closest('.prog-row');
         if (!row) return;
-        const id = parseInt(row.dataset.id);
-        const rule = rulesList[id]; 
+        let id = parseInt(row.dataset.id);
+        let rule = rulesList[id]; 
         let payload = { id: id, acction: "update" }; // Default to update action
         let isValid = true; 
-
+        let rangeError = false;
 
         if (el.classList.contains('prog-in')) {
-            const parentCol = el.closest('.prog-col');
-            const type = parentCol.dataset.type;
-            const inputs = parentCol.querySelectorAll('.prog-in');
-            const v1 = inputs[0].value.trim();
-            const v2 = inputs[1].value.trim();
+            let parentCol = el.closest('.prog-col');
+            let type = parentCol.dataset.type;
+            let inputs = parentCol.querySelectorAll('.prog-in');
+            let v1 = inputs[0].value.trim();
+            let v2 = inputs[1].value.trim();
 
             // validation logic
             if (type === 'time') {
@@ -782,8 +785,8 @@ const container = document.getElementById('prog-list');
 
                 if(isValid && n1 !== 9999.0 && n2 !== 9999.0 && n1 >= n2) isValid = false;
                 v1 = n1; v2 = n2;
-                inputs[0].classList.toggle('invalid', !isValid || rangeError);
-                inputs[1].classList.toggle('invalid', !isValid || rangeError);
+                inputs[0].classList.toggle('invalid', !isValid);
+                inputs[1].classList.toggle('invalid', !isValid);
       
             }
 
