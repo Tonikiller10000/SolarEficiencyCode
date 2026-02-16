@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+    <html>
+        <head>
+            <title>Solar Eficiency</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+            <link rel="stylesheet" type="text/css" href="style.css">
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        </head>
+
+        <body>
+            <div class="container">
+                <h1 class="app-title">ESP32-SolarPowerEfficiency APP</h1>
+                <div class="nav-bar">
+                    <button class="nav-btn active" onclick="tab('scan')">SCAN</button>
+                    <button class="nav-btn" onclick="tab('devices') ; acction(0,'device_list','update')">DEVICES</button>
+                    <button class="nav-btn" onclick="tab('program') ; acction(0,'rules_list','update')">PROGRAM</button>
+                    <button class="nav-btn" onclick="tab('stats') ; acction(0,'stats_list','update')">STATS</button>
+                </div>
+
+                <div id="tab-scan">     
+                    <div class="section-header">
+                        <span style="font-weight:bold">Found Devices: <span id="found-nr">0</span></span>
+                        <button class="btn-refresh" onclick="acction(0, 'esp', 'update_scan')"><i class="fas fa-sync"></i></button>
+                    </div>
+                    <div class="scan-header"><span>ID</span><span>SSID</span><span>TYPE</span><span style="text-align:right">RSSI</span><span style="visibility:hidden; width:120px">ACTION</span> </div></div>
+                </div>
+                <div id="tab-devices" class="hidden"></div>
+                <div id="tab-program" class="hidden">
+                    <div class="section-header"><span style="font-weight:bold">Automation Rules</span></div>
+                    <div id="prog-list"></div>
+                    <div class="add-row" onclick="acction(0,'rules_row','add')"><i class="fas fa-plus"></i></div>
+                </div>
+                <div id="tab-stats" class="hidden">
+                    <div class="section-header stat-max-width">
+                        <span style="font-weight:bold; font-size: 1.1rem;">Live Metrics</span>
+                    </div>
+                    <div class="esp-flex stat-max-width">
+                        <div class="esp-info-left">
+                            <span class="esp-name">ESP32 Main</span>
+                            <div class="esp-meta">
+                                <span id="st-time">--:--:--</span>
+                                <span>DEC 20</span>
+                            </div>
+                        </div>
+                        <div class="temp-stack">
+                            <div class="temp-item"><span>T1:</span> <b class="temp-val" id="esp-t1"> 0 °C</b></div>
+                            <div class="temp-item"><span>T2:</span> <b class="temp-val" id="esp-t2"> 0 °C</b></div>
+                            <div class="temp-item"><span>T3:</span> <b class="temp-val" id="esp-t3"> 0 °C</b></div>
+                        </div>
+                        <div class="dist-group">
+                            <div class="mini-pie"></div>
+                            <div class="mini-legend">
+                                <div class="leg-item"><span class="d-blue"></span>Consumed</div>
+                                <div class="leg-item"><span class="d-green"></span>Reused</div>
+                                <div class="leg-item"><span class="d-red"></span>Sold</div>
+                            </div>
+                        </div>
+                        <div class="cmd-group">
+                            <span class="cmd-label">CMD:</span>
+                            <input type="text" id="cmd-in" placeholder="Code..." style="width:90px; height: 30px; text-align:center; border:1px solid #ddd; border-radius:4px;">
+                            <button class="btn-send" onclick="acction(0,'esp','cmd')">SEND</button>
+                        </div>
+                    </div>
+
+                    <div id="stats-sensor-list" class="stat-max-width"></div>
+
+                    <div id="extra-panels" class="stat-max-width" style="margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+                        <div id="console-box" class="device-card hidden" style="flex: 1; min-width: 250px; height: 200px; display: flex; flex-direction: column; padding: 10px; background: #1e1e1e; color: #0f0;">
+                            <div class="graph-title" style="color: #0f0;">Web Console</div>
+                            <div id="console-output" style="overflow-y: auto; flex: 1; font-family: monospace; font-size: 0.75rem;"></div>
+                        </div>
+                        <div id="files-box" class="device-card hidden" style="flex: 1; min-width: 250px; height: 200px; display: flex; flex-direction: column; padding: 10px;">
+                            <div class="graph-title">Internal Files</div>
+                            <div id="file-list-content" style="overflow-y: auto; flex: 1; font-size: 0.8rem;"></div>
+                        </div>
+                    </div>
+
+                   <div class="graph-controls" style="display:flex; gap:10px; margin-bottom:10px; justify-content:center;">
+                        <select id="graph-device" onchange="updateGraphOptions()"></select>
+                        <select id="graph-time" onchange="generateChart()"></select>
+                    </div>
+
+                    <div class="graph-card stat-max-width">
+                            <div class="graph-title">Analytics Overview</div> <div class="svg-container" style="position: relative; height: 100%; width: 100%; display: block;">                            <div class="svg-container" style="position: relative; height: 100%; width: 100%; display: block;">
+                                <canvas id="myChart"></canvas>
+                            </div>    
+                    </div>
+
+
+                </div>
+            </div>
+
+            <script src="script.js"></script>
+        </body>
+    </html>
